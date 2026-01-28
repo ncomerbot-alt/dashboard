@@ -251,8 +251,12 @@
 
     async function fetchPrice() {
       try {
-        const res = await fetch('https://api.porssisahko.net/v2/price.json?date=' + new Date().toISOString());
-        const data = await res.json();
+        // Use CORS proxy for browser requests
+        const proxyUrl = 'https://api.allorigins.win/get?url=';
+        const apiUrl = 'https://api.porssisahko.net/v2/price.json?date=' + new Date().toISOString();
+        const res = await fetch(proxyUrl + encodeURIComponent(apiUrl));
+        const wrapper = await res.json();
+        const data = JSON.parse(wrapper.contents);
         const price = data.price;
         const el = document.getElementById('price');
         el.textContent = price.toFixed(2) + ' snt/kWh';
